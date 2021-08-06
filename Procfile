@@ -1,0 +1,1 @@
+web: gunicorn education-app.wsgi --log-file -
