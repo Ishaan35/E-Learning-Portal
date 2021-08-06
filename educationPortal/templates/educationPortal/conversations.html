@@ -1,0 +1,244 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}Conversations{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'educationPortal/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/ClassView.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/conversations.css' %}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/869e8d43b7.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+    <header class="mainHeader">
+        <div style="display: flex; align-items: center;">
+            <div id="menuBars">
+                <i class="fas fa-bars menuBars"></i>
+            </div>
+            <img src="{% static 'educationPortal/Icons/Logo.svg' %}" style="height: 7vh; margin-right: 20px; color: orange; margin-left: 20px;"
+                class="logo">
+
+            <h4 class="title">E-Learning Portal</h4>
+        </div>
+        <div class="headerItems">
+    
+            <button class="profileButton" onclick="profilePopUp()">
+                {% if user.profile_pic %}
+                <img src="{{user.profile_pic.url}}" width="40px" height="40px" style="border-radius: 50%;">
+                {% else %}
+                <img src="/images/blankUserIcon.svg" width="40px" height="40px" style="border-radius: 50%;">
+                {% endif %}
+                <p class="profileButtonText">{{user.first_name}}</p>
+            </button>
+            <div class="profilePopUp" id="profilePopUp">
+            
+                {% if user.profile_pic %}
+                <img src="{{user.profile_pic.url}}" class="profilePic">
+                {% else %}
+                <img src="/images/blankUserIcon.svg" class="profilePic">
+                {% endif %}
+            
+                <button onclick="editPic()" class="editButton">
+                    <i class="fas fa-edit" style="margin-left: 2px; margin-bottom: 1px;"></i>
+                </button>
+            
+                <form class="editProfile" id="imageEdit" hidden action="{% url 'editProfileImage' %}" method="POST"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <input type="file" id="img" name="img" accept="image/*">
+                        <input type="submit" class="submitBtn">
+                    </div>
+            
+                </form>
+            
+            
+                <h5 style="font-weight: 400; padding-top: 20px;">{{user.first_name}} {{user.last_name}}</h5>
+            
+            
+                {% if user.is_authenticated %}
+            
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <button class="logOutButton">Log Out</button>
+                </a>
+                {% else %}
+                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+                {% endif %}
+            
+            </div>
+    
+        </div>
+    </header>
+    
+    <div class="sideMenu" id="sideMenu">
+    
+        {% if user.profile_pic %}
+        <img src="{{user.profile_pic.url}}" class="profilePic" width="120px" height="120px"
+            style="margin: 20px; margin-bottom: 5px;">
+        {% else %}
+        <img src="/images/blankUserIcon.svg" class="profilePic" width="120px" height="120px"
+            style="margin: 20px; margin-bottom: 5px;">
+        {% endif %}
+    
+        <h4 style="color: white; margin-bottom: 20px;">{{user.first_name}} {{user.last_name}}</h4>
+
+        <a href="{% url 'index' %}" class="sideMenuLink" style="border-top: 1px solid rgb(70, 86, 189)">
+            <button> Home </button>
+        </a>
+    </div>
+
+    <div class='mainBody'>
+        
+        <div class="currentConversations">
+            <div style="display: flex; margin-top: 15px;">
+                <label style="color: #123166;">New Conversation:</label>
+            </div>
+            <div style="display: flex; width: 100%;">
+                <input type="text" placeholder="Enter a Username" id="newConversationInputField" onkeyup="showSuggestions()" style="padding-left: 15px;">
+                <i class="fas fa-search" style="font-size: large; background-color: white; padding: 15px; color: rgb(204, 204, 204); cursor: pointer;"></i>
+            </div>
+
+            <div id="suggestionDiv" hidden>
+
+                {% for student in students %}    
+                    <div class="suggestion" id='{{student.username}} {{student.first_name}} {{student.last_name}}' onclick="addConversation(id)">
+                        {% if student.profile_pic %}
+                        <img src="{{student.profile_pic.url}}" style="width: 30px; height: 30px; border-radius: 50%; margin-top: 10px;">
+                        {% else %}
+                        <img src="/images/blankUserIcon.svg" style="width: 30px; height: 30px; border-radius: 50%; margin-top: 10px;">
+                        {% endif %}
+                        <p style="margin-top: 10px; padding-left: 10px;"> {{student.username}} ({{student.first_name}} {{student.last_name}}) </p>
+                    </div>
+                    
+                {% endfor %}
+
+            </div>
+
+            <p style="color: #123166; margin-top: 20px; transition: 0.2s; font-weight: 400;">Messages:</p>
+
+            <!--Conversation-->
+            {% for c in conversations %}
+            <div class="conversationListItem" onclick="selectConversation('selectConversation:{{c.id}}')">
+                <div style="display: flex; width: 100%;">
+                    {% if request.user == c.user1 %}
+                        {% if c.user2.profile_pic %}
+                        <img src="{{c.user2.profile_pic.url}}" width="35px" height="35px"
+                            style="border-radius: 50%;">
+                        {% else %}
+                        <img src="/images/blankUserIcon.svg" width="35px" height="35px"
+                            style="border-radius: 50%;">
+                        {% endif %}
+
+                        <p class="conversationPerson">{{c.user2.first_name}} {{ c.user2.last_name}}</p>
+                    {% else %}
+                        {% if c.user1.profile_pic %}
+                        <img src="{{c.user1.profile_pic.url}}" width="35px" height="35px"
+                            style="border-radius: 50%;">
+                        {% else %}
+                        <img src="/images/blankUserIcon.svg" width="35px" height="35px"
+                            style="border-radius: 50%;">
+                        {% endif %}
+                        <p class="conversationPerson">{{c.user1.first_name}} {{ c.user1.last_name}}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="textingView" >
+            
+            {% if conversations.count == 0 %}
+                <img src="{% static 'educationPortal/Icons/VectorArtConversations.png' %}" style="width: 25vw;">
+                <h5 style="font-weight: 400; width: 50vh; text-align: center;">Easily communicate privately with classmates and teachers!</h5>
+            {% endif %}
+
+            {% for c in conversations %}
+
+                {% if forloop.first %}
+                <div id="conversation:{{c.id}}" style="width: 100%;" class="entireConversation">
+                {% else %}
+                <div id="conversation:{{c.id}}" style="width: 100%;" hidden class="entireConversation">
+                {% endif %}
+                    <div class="textViewHeader">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col" style="display: flex; align-items: center; justify-content: flex-start; width: 25vw !important;">
+                                    {% if request.user == c.user1 %}
+                                    {% if c.user2.profile_pic %}
+                                    <img src="{{c.user2.profile_pic.url}}" width="45px" height="45px"
+                                        style="border-radius: 50%;">
+                                    {% else %}
+                                    <img src="/images/blankUserIcon.svg" width="45px" height="45px"
+                                        style="border-radius: 50%;">
+                                    {% endif %}
+                            
+                                    <p class="conversationPerson" style="padding-top: 15px;">{{c.user2.first_name}} {{ c.user2.last_name}}</p>
+                                    {% else %}
+                                    {% if c.user1.profile_pic %}
+                                    <img src="{{c.user1.profile_pic.url}}" width="45px" height="45px"
+                                        style="border-radius: 50%;">
+                                    {% else %}
+                                    <img src="/images/blankUserIcon.svg" width="45px" height="45px"
+                                        style="border-radius: 50%;">
+                                    {% endif %}
+                                    <p class="conversationPerson" style="padding-top: 15px;">{{c.user1.first_name}} {{ c.user1.last_name}}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="col" style="display: flex; align-items: center; justify-content: flex-end;">
+                                    <button class="conversationDeleteButton" onclick="deleteConversation('{{c.id}}')"><i class="far fa-trash-alt"></i></button>
+                                </div>
+                            </div>
+                        </div>     
+                    </div>
+
+
+                    <div class="texts">
+                        {% for text in c.texts.all %}
+                            {% if text.sender == user %}
+                                <div class="SentText">
+                                    <p style="font-size: xx-small;">{{text.date}}</p>
+                                    {{text.text}}
+                                </div>
+                            {% else %}
+                                <div class="IncomingText">
+                                    <p style="font-size: xx-small;">{{text.date}}</p>
+                                    {{text.text}}
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+                    </div>
+
+
+                    <div style="height: 9vh; display: flex; align-items: center; justify-content: center; width: 100%;">
+                        <div style="background-color: white; width: 90%; border-radius: 5px; display: flex;">
+                            <input type="text" class="newTextField" placeholder="message" id="messageField:{{c.id}}">
+                            <button style="background: white; font-size: large; outline: none; border:none; color:gray"><i
+                                    class="far fa-paper-plane" onclick="sendMessage('{{c.id}}')"></i></button>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+
+    <script src="{% static 'educationPortal/Classroom.js' %}"></script>
+    <script src="{% static 'educationPortal/index.js' %}"></script>
+    <script src="{% static 'educationPortal/Conversations.js' %}"></script>
+
+</body>
+
+</html>

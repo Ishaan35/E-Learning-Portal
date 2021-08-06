@@ -1,0 +1,23 @@
+<svg width="100" height="125.00000000000001" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" version="1.1">
+ <g>
+  <title>Layer 1</title>
+  <g id="svg_1">
+   <g id="svg_2">
+    <defs>
+     <rect height="206" width="1548" y="-42.5" x="-562.3" id="a"/>
+     <filter id="svg_7_blur">
+      <feGaussianBlur stdDeviation="0" in="SourceGraphic"/>
+     </filter>
+    </defs>
+    <clipPath>
+     <use id="svg_3" overflow="visible" xlink:href="#a"/>
+    </clipPath>
+   </g>
+  </g>
+  <g id="svg_4">
+   <path fill="#ffffff" id="svg_5" d="m68.5,78.8l0,-4.4l-15.5,0l-4.4,0l0,-4.4l0,-11.1l0,-1.8c-1.7,-0.3 -3.4,-0.4 -5.2,-0.4c-16.3,0 -29.4,10.9 -29.4,24.3l54.8,0c-0.2,-0.6 -0.3,-1.4 -0.3,-2.2z"/>
+  </g>
+  <circle fill="#ffffff" id="svg_6" r="17.7" cy="34.6" cx="44.2"/>
+  <path fill="#ffffff" filter="url(#svg_7_blur)" id="svg_7" d="m74.3,81.1c0.5,0 1.1,-0.3 1.8,-0.9l13.5,-12.7c1.8,-1.7 1.8,-4.4 0,-6.1l-13.4,-12.8c-0.7,-0.6 -1.3,-1 -1.8,-1c-0.8,0 -1.4,0.8 -1.4,2.3l0,8.9l-20,0l0,11.2l19.9,0l0,8.9c0,1.4 0.6,2.2 1.4,2.2z"/>
+ </g>
+</svg>

@@ -1,0 +1,418 @@
+body {
+  padding: 0px;
+  margin: 0;
+}
+
+.mainHeader {
+  display: flex;
+  background: #123166;
+  min-height: 11vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  position: fixed;
+  width: 100%;
+  z-index: 6;
+}
+
+.mainHeader h2 {
+  font-size: 30px;
+}
+
+.title {
+  width: 250px;
+}
+
+.headerItems {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.menuBars {
+  width: 10px;
+  font-size: 23px;
+  margin-right: 35px;
+  transition: 0.2s;
+  margin-left: 30px;
+}
+.menuBars:hover {
+  color: #ffab2c;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.sideMenu {
+  position: fixed;
+  height: 100vh;
+  width: 20vw;
+  background-color: #123166;
+  display: flex;
+  flex-direction: column;
+  z-index: 9;
+  margin-top: 11vh;
+  align-items: center;
+
+  left: -20vw;
+  transition: 0.4s;
+}
+
+.sideMenuActive {
+  left: 0;
+}
+
+.profilePopUp {
+  width: 20vw;
+  height: 60vh;
+  background: white;
+  color: black;
+  border-radius: 5px;
+  box-shadow: 0px 0px 7px #aaaaaa;
+  position: fixed;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  transform: scale(0);
+  opacity: 0;
+  transition: 0.3s;
+  margin-right: -5vw !important;
+  z-index: 5;
+}
+.profilePopUpActive {
+  transform: scale(1);
+  opacity: 1;
+  transition: 0.4s;
+  margin-top: 65vh;
+  margin-right: 0vw !important;
+}
+
+.logOutButton {
+  background: #f0f0f0;
+  border: none;
+  outline: none;
+  padding: 7px;
+  border-radius: 3px;
+  transition: 0.2s;
+}
+.logOutButton:hover {
+  background: #e0e0e0;
+  transition: 0.2s;
+}
+.logOutButton:active {
+  transform: scale(0.95);
+}
+.logOutButton:focus {
+  outline: none;
+}
+
+.addButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  color: white;
+  outline: none;
+  border: none;
+  font-size: 22px;
+  width: 45px;
+  height: 45px;
+  transition: 0.3s;
+}
+.addButton:hover {
+  background: rgb(255, 145, 0);
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.newClassModal {
+  position: fixed;
+  width: 50%;
+  height: 60%;
+  background: white;
+  opacity: 0;
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+  border-radius: 3vh;
+  transition: 0.4s;
+}
+.greyBackground {
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: transparent;
+  position: fixed;
+  transition: 0.4s;
+}
+
+.modalActive {
+  transition: 0.4s;
+  opacity: 1;
+}
+
+.modalHead {
+  background: transparent;
+  min-height: 8vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+}
+.greyBackgroundActive {
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 10;
+  transition: 0.4s;
+}
+
+.profilePic {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.closeModalButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  float: right;
+  width: 30px;
+  height: 30px;
+  outline: none;
+  border: none;
+  color: rgb(133, 112, 177);
+  background: none;
+  transition: 0.2s;
+}
+
+.closeModalButton:hover {
+  background-color: rgba(41, 41, 91, 0.1);
+  border-radius: 50%;
+}
+
+.classNameInput {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.newClassInputText {
+  outline: none;
+  background: rgb(238, 238, 238);
+  border: none;
+  border-bottom: 1.5px solid lightgray;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  transition: 0.3s;
+}
+
+.newClassInputText:focus {
+  border-bottom: 1.5px solid rgb(0, 157, 255);
+  transition: 0.3s;
+}
+
+.createClassButton {
+  color: white;
+  background: rgb(0, 184, 67);
+  border-radius: 5px;
+  padding: 10px;
+  font-size: larger;
+  border: none;
+  outline: none;
+  transition: 0.2s;
+}
+
+.createClassButton:hover {
+  background: rgb(0, 148, 54);
+  transition: 0.2s;
+}
+
+.myGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
+  padding: 20px;
+  grid-gap: 20px;
+  width: 100vw;
+}
+
+.classCard {
+  border-radius: 10px;
+  min-height: 30vh;
+  transition: 0.3s;
+}
+
+.classCard:hover {
+  transform: translate(3px, 3px);
+  transition: 0.3s;
+  box-shadow: 5px 5px 10px #aaaaaa;
+}
+
+.cardBlue {
+  background-color: #5c97ff;
+}
+.cardGreen {
+  background-color: #35dc6a;
+}
+.cardRed {
+  background-color: #dd544f;
+}
+.cardOrange {
+  background-color: #ffab2c;
+}
+.cardPurple {
+  background-color: #c32be6;
+}
+.cardGray {
+  background-color: #9098a7;
+}
+
+.classLink {
+  color: white;
+  font-weight: 600;
+  font-size: x-large;
+  padding-left: 20px;
+  transition: 0.2s;
+}
+.classLink:hover {
+  color: lightgrey !important;
+  transition: 0.2s;
+}
+
+.deleteButton {
+  bottom: 0;
+  background: none;
+  color: white;
+  outline: none;
+  border: none;
+  font-size: 25px;
+  padding: 15px;
+  transition: 0.2s;
+}
+
+.deleteButton:hover {
+  color: lightgray;
+  transition: 0.2s;
+}
+
+.editButton {
+  background-color: rgb(0, 106, 255);
+  color: white;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editButton:hover {
+  background-color: rgb(0, 93, 223);
+}
+
+.editProfile {
+  display: flex;
+  width: 80%;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.profileButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  color: white;
+  outline: none;
+  border: none;
+  font-size: 22px;
+  max-width: 150px;
+  max-height: 45px;
+  transition: 0.3s;
+  margin-right: 80px;
+}
+.profileButton:hover {
+  color: lightgray;
+  transition: 0.2s;
+}
+.profileButton:focus {
+  outline: none;
+}
+
+.profileButtonText {
+  padding-top: 12px;
+  padding-left: 10px;
+  max-width: 2vw;
+}
+
+.submitBtn {
+  background-color: rgb(0, 181, 42);
+  color: white;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  margin-top: 10px;
+}
+.submitBtn:hover {
+  background-color: rgb(0, 135, 32);
+}
+
+@media only screen and (max-width: 800px) {
+  .mainHeader h2 {
+    font-size: 30px;
+    padding-left: 20px;
+  }
+  .modalHead {
+    align-items: flex-start;
+  }
+  .closeModalButton {
+    width: 80px;
+    height: 80px;
+  }
+  .modalHead {
+    padding: 0;
+  }
+
+  .newClassModal {
+    width: 80%;
+  }
+
+  .profilePopUp {
+    width: 50vw;
+    margin-right: 5vw !important;
+  }
+  .menuBars {
+    margin-right: 10px;
+    margin-left: 30px;
+  }
+
+  .sideMenu {
+    width: 50%;
+    left: -50%;
+  }
+  .sideMenuActive {
+    left: 0%;
+  }
+  .profileButtonText {
+    display: none;
+  }
+  .profileButton {
+    margin-right: 20px;
+  }
+
+  .title {
+    width: 150px;
+  }
+}

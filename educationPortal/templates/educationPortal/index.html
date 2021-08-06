@@ -1,0 +1,251 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}My Classes{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'educationPortal/styles.css' %}" rel="stylesheet">
+        <link href="{% static 'educationPortal/ClassView.css' %}" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/869e8d43b7.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+    
+    <header class="mainHeader">
+        <div style="display: flex; align-items: center;">
+            <div id="menuBars">
+                <i class="fas fa-bars menuBars"></i>
+            </div>
+            <img src="{% static 'educationPortal/Icons/Logo.svg' %}" style="height: 7vh; margin-right: 20px; color: orange; margin-left: 20px;" class="logo">
+            <h4 class="title">E-Learning Portal</h4>
+        </div>
+        <div class="headerItems"> 
+            {% if user.userType == "Teacher" %}
+                <button class="addButton" onclick="newClass()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            {% endif %}
+            {% if user.userType == "Student" %}
+                <button class="addButton" onclick="newClass()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            {% endif %}
+            <button class="profileButton" onclick="profilePopUp()">
+                {% if user.profile_pic %}
+                <img src="{{user.profile_pic.url}}" width="40px" height="40px" style="border-radius: 50%;">
+                {% else %}
+                <img src="/images/blankUserIcon.svg" width="40px" height="40px" style="border-radius: 50%;">
+                {% endif %}
+                <p class="profileButtonText">{{user.first_name}}</p>
+            </button>
+
+            <div class="profilePopUp" id="profilePopUp">
+
+                {% if user.profile_pic %}
+                    <img src="{{user.profile_pic.url}}" class="profilePic">
+                {% else %}
+                    <img src="/images/blankUserIcon.svg" class="profilePic">
+                {% endif %}
+
+                <button onclick="editPic()" class="editButton">
+                    <i class="fas fa-edit" style="margin-left: 2px; margin-bottom: 1px;"></i>
+                </button>
+
+                <form class="editProfile" id="imageEdit" hidden action="{% url 'editProfileImage' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %} 
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <input type="file" id="img" name="img" accept="image/*">
+                        <input type="submit" class="submitBtn">
+                    </div>
+                   
+                </form>
+                
+
+                <h5 style="font-weight: 400; padding-top: 20px;">{{user.first_name}} {{user.last_name}}</h5>
+
+                
+                {% if user.is_authenticated %}
+
+                    <a class="nav-link" href="{% url 'logout' %}">
+                        <button class="logOutButton">Log Out</button>
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                {% endif %}
+                
+            </div>
+            
+        </div>
+    </header>
+
+    <div class="sideMenu" id="sideMenu">
+    
+        {% if user.profile_pic %}
+        <img src="{{user.profile_pic.url}}" class="profilePic" width="120px" height="120px"
+            style="margin: 20px; margin-bottom: 5px;">
+        {% else %}
+        <img src="/images/blankUserIcon.svg" class="profilePic" width="120px" height="120px"
+            style="margin: 20px; margin-bottom: 5px;">
+        {% endif %}
+    
+        <h4 style="color: white; margin-bottom: 20px;">{{user.first_name}} {{user.last_name}}</h4>
+    
+        <a href="{% url 'conversations' %}" class="sideMenuLink" style="border-top: 1px solid rgb(70, 86, 189)">
+            <button> Conversations </button>
+        </a>
+    </div>
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    
+
+    <div class="myGrid">
+        {% for class in classes %}
+        <div class="classCard {{class.theme}}">
+            <br>
+            <a href="{% url 'ViewClassroom' code=class.code %}" class="classLink">
+                {{class.name}}
+            </a>
+            <p style="color: white; padding-left: 20px; padding-top: 15px;">{{class.subject}}</p>
+            <div style="display: flex; justify-content: flex-end; align-items: flex-end; bottom: 0%; position: relative;">
+                {% if user.userType == "Teacher"%}
+                    <button id={{class.id}} class="deleteButton" onclick="deleteClass('{{class.name}}',id)">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                {% endif %}
+                {% if user.userType == "Student" %}
+                    <button id={{class.code}} class="deleteButton" onclick="leave(id)">
+                        <img src="{% static 'educationPortal/Icons/leaveClass.svg' %}" width="40px" style="color: gray;">
+                    </button>
+                {% endif %}
+            </div>
+            
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!--Input modal Create Class-->
+    <div class="greyBackground">
+        <div class="newClassModal">
+            <div class='container'>
+                <div class="row modalHead">
+                    <button class="closeModalButton" onclick="newClass()">
+                        <img src="{% static 'educationPortal/Icons/x.svg' %}">
+                    </button>
+                </div>
+            </div>
+            {% if user.userType == "Teacher" %}
+                <div class="classNameInput">
+                    <div style="width: 90%;">
+                        <h3 style="color:gray">Create Class</h3>
+                        <input type="text" name="className" class="newClassInputText" id="class_name_field" placeholder="Name of Class">
+                        <br>
+                        <input type="text" name="classSubject" class="newClassInputText" id="class_subject_field"
+                            placeholder="Subject or Section">
+                        <br>
+                        <label>Theme:</label>
+                        <div style="display: flex; align-items: center;">
+                            <input type="radio" name="colorSelect" value="cardBlue" id="cardBlue" class="colorSelect">
+                            <label for="cardBlue" style="width: 30px; height: 30px; border-radius: 5px; margin-right: 5px;"
+                                class="cardBlue"></label>
+                
+                            <input type="radio" name="colorSelect" value="cardGreen" id="cardGreen" class="colorSelect">
+                            <label for="cardGreen" style="width: 30px; height: 30px; border-radius: 5px; margin-right: 5px;"
+                                class="cardGreen"></label>
+                
+                            <input type="radio" name="colorSelect" value="cardRed" id="cardRed" class="colorSelect">
+                            <label for="cardRed" style="width: 30px; height: 30px; border-radius: 5px; margin-right: 5px;"
+                                class="cardRed"></label>
+                
+                            <input type="radio" name="colorSelect" value="cardOrange" id="cardOrange" class="colorSelect">
+                            <label for="cardOrange" style="width: 30px; height: 30px; border-radius: 5px; margin-right: 5px;"
+                                class="cardOrange"></label>
+                
+                            <input type="radio" name="colorSelect" value="cardPurple" id="cardPurple" class="colorSelect">
+                            <label for="cardPurple" style="width: 30px; height: 30px; border-radius: 5px; margin-right: 5px;"
+                                class="cardPurple"></label>
+                
+                            <input type="radio" name="colorSelect" value="cardGray" id="cardGrey" class="colorSelect">
+                            <label for="cardGrey" style="width: 30px; height: 30px; border-radius: 5px; margin-right: 5px;"
+                                class="cardGray"></label>
+                        </div>
+                        <div style="display: flex; justify-content: center;">
+                            <button type="submit" class="createClassButton"
+                                onclick="createClass(`${document.getElementById('class_name_field').value}`, `${document.getElementById('class_subject_field').value}`)">
+                                Create
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if user.userType == "Student" %}
+                <div class="classNameInput">
+                    <div style="width: 90%;">
+                        <h3 style="color:gray">Join Class</h3>
+                        <input type="text" name="className" class="newClassInputText" id="class_code_field" placeholder="Class code" autofocus >
+                        
+                        <div style="display: flex; justify-content: center;">
+                            <button type="submit" class="createClassButton"
+                                onclick="joinClass(`${document.getElementById('class_code_field').value}`)">
+                                Join
+                            </button>
+                        </div>
+                        <p style="color: rgb(255, 64, 64); font-weight: 400;" hidden id="notValidCode">Code is not valid!</p>
+                    </div>
+                </div>
+            {% endif %}
+            
+        </div>
+    </div>
+    <!--Unenroll Confirmation-->
+    <div class="greyBackground" id="unEnrollBackground">
+        <div class="newClassModal" id="unEnrollModal">
+            <div class='container'>
+                <div class="row modalHead">
+                    <button class="closeModalButton" onclick="leave()">
+                        <img src="{% static 'educationPortal/Icons/x.svg' %}">
+                    </button>
+                </div>
+            </div>  
+            <div class="classNameInput">
+                <div style="width: 90%;">
+                    <div style="display: flex; justify-content: center;">
+                        <p>Are you sure you want to un-enroll from this class?</p>
+                    </div>
+                    <div style="display: flex; justify-content: center;">
+                        <button onclick="leave()" class="createClassButton" style="background-color: rgb(183, 192, 221); margin: 10px;">
+                            No
+                        </button>
+                        <button onclick="leaveClass()" class="createClassButton" style="background-color: rgb(236, 47, 47); margin: 10px;">
+                            Yes
+                        </button>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+
+
+    
+    {% block body %}
+    {% endblock %}
+
+    <script src="{% static 'educationPortal/index.js' %}"></script>
+
+</body>
+
+</html>

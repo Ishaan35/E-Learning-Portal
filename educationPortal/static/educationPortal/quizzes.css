@@ -1,0 +1,98 @@
+.QuizTitle {
+  padding: 5px;
+  font-size: x-large;
+  outline: none;
+  border: none;
+  border-bottom: 0.5px solid rgb(162, 162, 162);
+  text-align: center;
+  color: rgb(83, 83, 83);
+}
+
+.question {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#questionsContainer {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+#questionList {
+  width: 40%;
+  height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.questionListItem {
+  background: rgb(251, 251, 251);
+  padding: 10px;
+  margin-top: 0;
+  cursor: pointer;
+  border-bottom: 0.5px solid lightgray;
+  outline: 2px solid transparent;
+  margin-right: 2px;
+}
+.questionListItem:hover {
+  background: rgb(233, 233, 233);
+  transition: 0.2s;
+}
+
+.questionListItemSelected {
+  outline: 2px solid rgb(0, 115, 255);
+  z-index: 2;
+}
+
+.optionInput {
+  outline: none;
+  border: none;
+  border-bottom: 0.5px solid lightgray;
+  width: 100%;
+  margin: 3px;
+  padding: 3px;
+}
+
+.optionInput:focus {
+  border-bottom: 1.5px solid rgb(60, 164, 255);
+}
+
+.optionCheck {
+  background: rgb(233, 233, 233);
+  color: rgb(160, 160, 160);
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.optionCorrect {
+  background: rgb(0, 191, 0);
+  color: white;
+}
+
+.postButton {
+  background-color: rgb(0, 136, 255);
+}
+.postButton:hover {
+  background-color: rgb(0, 136, 255);
+  filter: brightness(1.2);
+}
+
+.discardButton {
+  background-color: rgb(255, 34, 34);
+}
+.discardButton:hover {
+  background-color: rgb(255, 34, 34);
+  filter: brightness(1.2);
+}
+
+@media only screen and (max-width: 600px) {
+  .dateReminder {
+    display: none;
+  }
+}
