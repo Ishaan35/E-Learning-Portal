@@ -1,0 +1,55 @@
+.QuizCol {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding-top: 13vh;
+}
+
+.QuizInfo {
+  border: 1.5px solid lightgray;
+  width: 70%;
+  height: 80vh;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 20vh;
+}
+
+input[type="radio"]:after {
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  top: -5px;
+  left: -1px;
+  position: relative;
+  background-color: #f8f8f8;
+  content: "";
+  display: inline-block;
+  visibility: visible;
+  border: 0.5px solid lightgray;
+}
+
+input[type="radio"]:checked:after {
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  top: -5px;
+  left: -1px;
+  position: relative;
+  background-color: #00b3ff;
+  content: "";
+  display: inline-block;
+  visibility: visible;
+}
+
+.redHighlight {
+  background-color: rgba(256, 0, 0, 0.2);
+  color: darkred;
+
+}
+.greenHighlight {
+  background-color: rgba(0, 173, 6, 0.2);
+  color: green;
+  padding-right: 5px;
+}

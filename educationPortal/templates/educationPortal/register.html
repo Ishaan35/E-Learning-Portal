@@ -1,0 +1,65 @@
+{% extends "educationPortal/layout.html" %}
+
+{% block body %}
+    
+    <h2>Register</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+
+    <div class="inputForm" style="background: transparent; overflow-y: auto; padding-bottom: 20px;height: 100vh; margin-top: 11vh; margin-bottom: 11vh;">
+
+        <h2>Register</h2>
+        <form action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" autofocus type="text" name="firstname" placeholder="First Name" autocomplete="off">
+            </div>
+        
+            <div class="form-group">
+                <input class="form-control" autofocus type="text" name="lastname" placeholder="Last Name" autocomplete="off">
+            </div>
+        
+            <p style="font-size: larger;">Are you a teacher or student?</p>
+            <div class="form-group" style="display: flex; align-items: center;">
+                <br>
+                <input autofocus type="radio" name="userType" value="Student" checked="checked">
+                <label style="padding-top: 6px; padding-left: 10px; padding-right: 10px;">Student:</label>
+                <input autofocus type="radio" name="userType" value="Teacher">
+                <label style="padding-top: 6px; padding-left: 10px; padding-right: 10px;">Teacher:</label>
+            </div>
+        
+            <div class="form-group">
+                <input class="form-control" autofocus type="text" name="username" placeholder="Username" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="email" name="email" placeholder="Email Address" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password" placeholder="Password" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="file" id="img" name="img" accept="image/*" hidden>
+                <label for="img" class="custom-file-upload">
+                    <div class="picUpload">
+                        Upload Profile Picture
+                    </div>
+                </label>
+
+            </div>
+            <input class="btn btn-primary" type="submit" value="Register">    
+        </form>   
+        Already have an account? <a href="{% url 'login' %}" style="color: rgb(157, 198, 255);">Log In here.</a>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+    
+
+{% endblock %}

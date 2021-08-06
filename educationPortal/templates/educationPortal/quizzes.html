@@ -1,0 +1,250 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}Quizzes{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'educationPortal/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/ClassView.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/conversations.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/assignments.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/quizzes.css' %}" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/869e8d43b7.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <header class="mainHeader">
+        <div style="display: flex; align-items: center;">
+            <div id="menuBars">
+                <i class="fas fa-bars menuBars"></i>
+            </div>
+                        <img src="{% static 'educationPortal/Icons/Logo.svg' %}" style="height: 7vh; margin-right: 20px; color: orange; margin-left: 20px;"
+                            class="logo">
+
+            <h4 class="title">E-Learning Portal</h4>
+        </div>
+        <div class="headerItems">
+
+            <button class="profileButton" onclick="profilePopUp()">
+                {% if user.profile_pic %}
+                <img src="{{user.profile_pic.url}}" width="40px" height="40px" style="border-radius: 50%;">
+                {% else %}
+                <img src="/images/blankUserIcon.svg" width="40px" height="40px" style="border-radius: 50%;">
+                {% endif %}
+                <p class="profileButtonText">{{user.first_name}}</p>
+            </button>
+            <div class="profilePopUp" id="profilePopUp">
+
+                {% if user.profile_pic %}
+                <img src="{{user.profile_pic.url}}" class="profilePic">
+                {% else %}
+                <img src="/images/blankUserIcon.svg" class="profilePic">
+                {% endif %}
+
+                <button onclick="editPic()" class="editButton">
+                    <i class="fas fa-edit" style="margin-left: 2px; margin-bottom: 1px;"></i>
+                </button>
+
+                <form class="editProfile" id="imageEdit" hidden action="{% url 'editProfileImage' %}" method="POST"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <input type="file" id="img" name="img" accept="image/*">
+                        <input type="submit" class="submitBtn">
+                    </div>
+
+                </form>
+
+
+                <h5 style="font-weight: 400; padding-top: 20px;">{{user.first_name}} {{user.last_name}}</h5>
+
+
+                {% if user.is_authenticated %}
+
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <button class="logOutButton">Log Out</button>
+                </a>
+                {% else %}
+                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </header>
+
+    <div class="sideMenu" id="sideMenu">
+
+        {% if user.profile_pic %}
+        <img src="{{user.profile_pic.url}}" class="profilePic" width="120px" height="120px"
+            style="margin: 20px; margin-bottom: 5px;">
+        {% else %}
+        <img src="/images/blankUserIcon.svg" class="profilePic" width="120px" height="120px"
+            style="margin: 20px; margin-bottom: 5px;">
+        {% endif %}
+
+        <h4 style="color: white; margin-bottom: 20px;">{{user.first_name}} {{user.last_name}}</h4>
+
+        <a href="{% url 'index' %}" class="sideMenuLink" style="border-top: 1px solid rgb(70, 86, 189)">
+            <button>Home</button>
+        </a>
+        <a href="{% url 'ViewClassroom' class.code %}" class="sideMenuLink">
+            <button>Announcements</button>
+        </a>
+        <a href="{% url 'assignments' class.code %}" class="sideMenuLink">
+            <button> Assignments </button>
+        </a>
+        <a href="{% url 'quizzes' class.code %}" class="sideMenuLink">
+            <button> Quizzes </button>
+        </a>
+        <a href="{% url 'conversations'%}" class="sideMenuLink">
+            <button> Conversations </button>
+        </a>
+    </div>
+    
+
+    <div class="mainColumnAssignments">
+        <div style='display: flex; width: 100%;'>
+            <h3 style="padding-top: 30px; padding-left: 30px; padding-bottom: 20px;color:rgb(68, 68, 68)">Quizzes</h3>
+        </div>
+        <div class="assignmentsColumn">
+            {% if user == class.teacher %}
+            <button class="createAssignmentButton" onclick="newAssignmentModal(); setDate(`{{date | date:'Y-m-d_H:i'}}`)">
+                <i class="fas fa-plus" style="transform: scale(1.3); padding: 10px; color: white;"></i>
+                <label style="color: white; padding-top: 8px; padding-left: 10px; padding-right: 10px;">Create</label>
+            </button>
+            {% endif %}
+            <br>
+            {% if quizzes.count <= 0 %}
+                <p>No quizzes yet </p>
+            {% endif %}
+
+            {% for q in quizzes %}
+            <a style="width: 100%; text-decoration: none; color: rgb(71, 71, 71); font-weight: 400;"
+                href="{% url 'viewQuiz' class.code q.id %}">
+                <div class="assignmentItem">
+                    <i class="far fa-question-circle {{class.theme}}"
+                        style="color: white; font-size: x-large; align-self: center; height: 40px; width: 40px; padding-top: 8px; padding-left: 8px; border-radius: 50%;"></i>
+                    {% if not q.name == "" %}
+                        <p style="padding-top: 15px; padding-left: 15px;">{{q.name}}</p>
+                    {% else %}
+                        <p style="padding-top: 15px; padding-left: 15px;">Unnamed Quiz</p>   
+                    {% endif %}              
+                </div>
+            </a>
+    
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <div class="greyBackground">
+        <div class="newAssignmentModal" style="height: 95vh;">
+            <div class='container'>
+                <div class="row modalHead">
+                    <button class="closeModalButton" onclick="newAssignmentModal()">
+                        <img src="{% static 'educationPortal/Icons/x.svg' %}">
+                    </button>
+                </div>
+                <p
+                    style="justify-self: flex-start; color: rgb(91, 91, 91); font-size: larger; font-weight: 500; margin-bottom: 0px; padding-bottom: 0px;">
+                    Quiz Creator</p>
+            </div>
+            {% if user.userType == "Teacher" %}
+                <div style="width: 100%; display: flex; flex-direction: column;">
+                    <div style="width: 100%; display: flex; justify-content: center;">
+                        <input id="QuizTitle" class="QuizTitle" placeholder="Untitled Quiz" value="Untitled Quiz" onkeyup="setName()">
+                    </div>
+                    <div style="width: 100%; display: flex; justify-content: center; align-items: center; padding: 10px;">
+                        <label style="padding-top: 10px; padding-right: 15px;">Duedate:</label>
+                        
+                            <input type="datetime-local"
+                                style="border: 0.5px solid lightgrey; outline: none; border-radius: 3px; padding: 5px; color: gray"
+                                id="assignmentDueDate" value='{{date | date:"Y-m-dTH:i" }}'>
+                            <label style="color: rgb(214, 29, 29); padding-top: 5px; padding-left: 15px;" class="dateReminder">Don't forget to set a duedate</label>
+                        
+                        <br>
+                    </div>
+                    
+
+                    <div style="display: flex;">
+                        <div id="questionsContainer" style="margin-right: 30px;">
+                            <h6 id="questionCounter" style="padding-left: 3vw;">Question 1 of 20</h6>
+                            <br>
+                            <div class="question">
+                                <input type="text" id="questionName" class="optionInput" style="width: 100%; margin-left: 3vw; padding: 3px; color: rgb(83, 83, 83); font-size: x-large; "
+                                    placeholder="Enter Question" onkeyup="update(event)" onchange="makeList()">
+                                <br>
+                                <br>
+                                <div style="display: flex; align-items: center; margin-left: 3vw;">
+                                    <span style="width: 17px; height: 16px; border-radius: 50%; border: 0.5px solid rgb(198, 198, 198); margin: 0px; padding: 0px;"></span>
+                                    <input type="text" class="optionInput" id="option1Input"
+                                        placeholder="Option 1" onkeyup="update(event)">
+                                    
+                                    <i class="fas fa-check optionCheck" id="option:1" onclick="setCorrect(1)"></i>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-left: 3vw;">
+                                    <span
+                                        style="width: 17px; height: 16px; border-radius: 50%; border: 0.5px solid rgb(198, 198, 198); margin: 0px; padding: 0px;"></span>
+                                    <input class="optionInput" type="text" id="option2Input"
+                                        placeholder="Option 2" onkeyup="update(event)">
+                                    <i class="fas fa-check optionCheck" id="option:2" onclick="setCorrect(2)"></i>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-left: 3vw;">
+                                    <span
+                                        style="width: 17px; height: 16px; border-radius: 50%; border: 0.5px solid rgb(198, 198, 198); margin: 0px; padding: 0px;"></span>
+                                    <input class="optionInput" type="text" id="option3Input"
+                                        placeholder="Option 3" onkeyup="update(event)">
+                                    <i class="fas fa-check optionCheck" id="option:3" onclick="setCorrect(3)"></i>
+
+                                </div>
+                                <div style="display: flex; align-items: center; margin-left: 3vw;">
+                                    <span
+                                        style="width: 17px; height: 16px; border-radius: 50%; border: 0.5px solid rgb(198, 198, 198); margin: 0px; padding: 0px;"></span>
+
+                                    <input class="optionInput" type="text" id="option4Input"
+                                        placeholder="Option 4" onkeyup="update(event)">
+
+                                    <i class="fas fa-check optionCheck" id="option:4" onclick="setCorrect(4)"></i>
+                                </div>
+                            
+                            </div>
+                        </div>
+                        <div id="questionList">
+                            <h6>Question List:</h6>
+                            <br>
+                            <div class="questionListItem questionListItemSelected" id="listItem:0" onclick="setCurrentQuestion('listItem:0')"> 1: Unnamed Question </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; width: 100%; justify-content: start;">
+                        <div style="width: 48%; display: flex; justify-content: center;">
+                            <button hidden onclick="add()" class="submitBtn" style="max-height: 35px; margin-left: 3vw;">Add Question</button>
+                        </div>    
+                        <div style="width: 48%; display: flex; justify-content:flex-end;">
+                            <button hidden onclick="postQuiz('{{class.code}}')" class="submitBtn postButton" style="font-size: 20px; width: 18vw; margin-right: 15px;"><i class="far fa-paper-plane" style="margin-right: 10px;"></i>Create and Post</button>
+                            <button hidden onclick="discard()" class="submitBtn discardButton" style="font-size: 18px; width: 20vw;"><i class="fas fa-trash-alt"></i> Discard Quiz</button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <script src="{% static 'educationPortal/Classroom.js' %}"></script>
+    <script src="{% static 'educationPortal/index.js' %}"></script>
+    <script src="{% static 'educationPortal/assignments.js' %}"></script>
+
+    <script src="{% static 'educationPortal/quizzes.js' %}"></script>
+
+</body>
+
+</html>

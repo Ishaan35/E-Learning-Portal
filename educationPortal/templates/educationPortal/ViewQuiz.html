@@ -1,0 +1,327 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}Quiz{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'educationPortal/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/ClassView.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/conversations.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/assignments.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/quizzes.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/viewAssignment.css' %}" rel="stylesheet">
+    <link href="{% static 'educationPortal/viewQuiz.css' %}" rel="stylesheet">
+
+
+    <script src="https://kit.fontawesome.com/869e8d43b7.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <header class="mainHeader">
+        <div style="display: flex; align-items: center;">
+            <div id="menuBars">
+                <i class="fas fa-bars menuBars"></i>
+            </div>
+                        <img src="{% static 'educationPortal/Icons/Logo.svg' %}" style="height: 7vh; margin-right: 20px; color: orange; margin-left: 20px;"
+                            class="logo">
+
+            <h4 class="title">E-Learning Portal</h4>
+        </div>
+        <div class="headerItems">
+
+            <button class="profileButton" onclick="profilePopUp()">
+                {% if user.profile_pic %}
+                <img src="{{user.profile_pic.url}}" width="40px" height="40px" style="border-radius: 50%;">
+                {% else %}
+                <img src="/images/blankUserIcon.svg" width="40px" height="40px" style="border-radius: 50%;">
+                {% endif %}
+                <p class="profileButtonText">{{user.first_name}}</p>
+            </button>
+            <div class="profilePopUp" id="profilePopUp">
+
+                {% if user.profile_pic %}
+                <img src="{{user.profile_pic.url}}" class="profilePic">
+                {% else %}
+                <img src="/images/blankUserIcon.svg" class="profilePic">
+                {% endif %}
+
+                <button onclick="editPic()" class="editButton">
+                    <i class="fas fa-edit" style="margin-left: 2px; margin-bottom: 1px;"></i>
+                </button>
+
+                <form class="editProfile" id="imageEdit" hidden action="{% url 'editProfileImage' %}" method="POST"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <input type="file" id="img" name="img" accept="image/*">
+                        <input type="submit" class="submitBtn">
+                    </div>
+
+                </form>
+
+
+                <h5 style="font-weight: 400; padding-top: 20px;">{{user.first_name}} {{user.last_name}}</h5>
+
+
+                {% if user.is_authenticated %}
+
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <button class="logOutButton">Log Out</button>
+                </a>
+                {% else %}
+                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </header>
+
+    <div class="sideMenu" id="sideMenu">
+
+        {% if user.profile_pic %}
+        <img src="{{user.profile_pic.url}}" class="profilePic" width="120px" height="120px"
+            style="margin: 20px; margin-bottom: 5px;">
+        {% else %}
+        <img src="/images/blankUserIcon.svg" class="profilePic" width="120px" height="120px"
+            style="margin: 20px; margin-bottom: 5px;">
+        {% endif %}
+
+        <h4 style="color: white; margin-bottom: 20px;">{{user.first_name}} {{user.last_name}}</h4>
+
+        <a href="{% url 'index' %}" class="sideMenuLink" style="border-top: 1px solid rgb(70, 86, 189)">
+            <button>Home</button>
+        </a>
+        <a href="{% url 'ViewClassroom' class.code %}" class="sideMenuLink">
+            <button>Announcements</button>
+        </a>
+        <a href="{% url 'assignments' class.code %}" class="sideMenuLink">
+            <button> Assignments </button>
+        </a>
+        <a href="{% url 'quizzes' class.code %}" class="sideMenuLink">
+            <button> Quizzes </button>
+        </a>
+        <a href="{% url 'conversations'%}" class="sideMenuLink">
+            <button> Conversations </button>
+        </a>
+    </div>
+
+
+    {% if user.userType == "Student" %}
+        <div class="QuizCol">
+            <div class="QuizInfo">
+                <h2 style="color: rgb(76, 76, 76);">{{quiz.name}}</h2>
+                {% if quiz.questions.count == 1 %}
+                    <p style="color: rgb(91, 91, 91);">{{quiz.questions.count}} question</p>
+                {% else %}
+                    <p style="color: rgb(91, 91, 91);">{{quiz.questions.count}} questions</p>
+                {% endif %}
+
+                <p style="color: rgb(91, 91, 91);">Due: {{quiz.duedate}}</p>
+
+                {% if not submission %}
+                    <button class="submitBtn" onclick="newAssignmentModal()">Start Quiz</button>
+                {% else %}
+                    <br>
+                    <div style="display: flex; transform: scale(1.3);">
+                        <i class="fas fa-check-circle"
+                            style="font-size: x-large; padding-right: 15px; padding-top: 3px; color: rgb(0, 191, 0);"></i>
+                        <p style="font-weight: 400; font-size: large;">Submitted</p>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <p style="font-size: large; margin-right: 15px;">Your Score: </p>
+                        {% if submission.grade >= 0 %}
+                        <p style='font-weight: 600; font-size: larger;'>{{submission.grade}} / {{quiz.questions.count}}</p>
+                        {% endif %}
+                    </div>
+                    <button class="submitBtn" onclick="newAssignmentModal(); seeResults('{{answers}}','{{correctanswers}}')">See Result</button>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if user == class.teacher %}
+        <br>
+        <br>
+        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h3 style="padding-left: 5vw; padding-top: 6vh; margin-bottom: 0; padding-bottom: 0;">Student Work</h3>
+                    <div class="Submissions">
+                        <div style="display: flex; flex-direction: column;">
+                            <p style="font-weight: 500;">Submissions:</p>
+                            {% for s in allSubmissions %}
+                            <div class="submissionItem" id="submission:{{forloop.counter}}" onclick="teacherViewQuiz('{{s.user.username}}:{{forloop.counter0}}', this, '{{answersArray}}', '{{correctanswers}}', '{{forloop.counter0}}')">
+                                {% if s.user.profile_pic %}
+                                <img src="{{s.user.profile_pic.url}}" width="40px" height="40px" style="border-radius: 50%;">
+                                {% else %}
+                                <img src="/images/blankUserIcon.svg" width="40px" height="40px" style="border-radius: 50%;">
+                                {% endif %}
+                                <p style="padding-left: 15px; padding-top: 10px;">{{s.user.first_name}} {{s.user.last_name}}
+                                    ({{s.user.username}})</p>
+                    
+                                {% if s.grade >= 0 %}
+                                <p class="currentGradeTextList">{{s.grade}} / {{quiz.questions.count}}</p>
+                                {% endif %}
+                    
+                            </div>
+                            {% endfor %}
+                    
+                            <br>
+                            <p style="font-weight: 500;">Assigned:</p>
+                            {% for n in non_submitters %}
+                            <div class="submissionItem">
+                                {% if n.profile_pic %}
+                                <img src="{{n.profile_pic.url}}" width="40px" height="40px" style="border-radius: 50%;">
+                                {% else %}
+                                <img src="/images/blankUserIcon.svg" width="40px" height="40px" style="border-radius: 50%;">
+                                {% endif %}
+                                <p style="padding-left: 15px; padding-top: 10px;">{{n.first_name}} {{n.last_name}} ({{n.username}})
+                                </p>
+                    
+                            </div>       
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <br>
+                    <br>
+                    <div id="message" style="display: flex; justify-content: center; color: rgb(98, 98, 98);">
+                        <p>Select a user from the left to see their quiz submission</p>
+                    </div>
+                    {% for s in allSubmissions %}
+                        <div style="width: 100%; display: flex; flex-direction: column;" id="{{s.user.username}}:{{forloop.counter0}}"
+                            class="studentSubmissionInfoItem" hidden>
+                            <h4 style="color: gray;">{{s.user.first_name}} {{s.user.last_name}}</h4>
+                            <div style="display: flex; justify-content: center;">
+                                <h4 style="color: rgb(66, 66, 66); border-bottom: 1px solid gray;">{{quiz.name}}</h4>
+                            </div>
+                            <br>
+                            <fieldset disabled="disabled" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                                <form style="width: 80%; overflow: auto; max-height: 70vh;" id="studentQuizForm">
+                                    {% for question in quiz.questions.all %}
+                                    <h5 id='question:{{ forloop.counter }}'> {{ forloop.counter }}. {{ question.question }}</h5>
+                                    <p style="color: rgb(208, 0, 0); font-weight: 600;" id='{{s.user.username}}:incorrect:{{forloop.counter}}' hidden>Incorrect</p>
+                                    <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;"
+                                        id='{{s.user.username}}:option1:{{ forloop.counter }}'>
+                                    <label style="padding-left: 10px; padding-right: 10px;"
+                                        id='{{s.user.username}}:labelOption1:{{ forloop.counter }}'>{{question.option1}}</label>
+                                    <br>
+                                    <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;"
+                                        id='{{s.user.username}}:option2:{{ forloop.counter }}'>
+                                    <label style="padding-left: 10px; padding-right: 10px;"
+                                        id='{{s.user.username}}:labelOption2:{{ forloop.counter }}'>{{question.option2}}</label>
+                                    <br>
+                                    <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;"
+                                        id='{{s.user.username}}:option3:{{ forloop.counter }}'>
+                                    <label style="padding-left: 10px; padding-right: 10px;"
+                                        id='{{s.user.username}}:labelOption3:{{ forloop.counter }}'>{{question.option3}}</label>
+                                    <br>
+                                    <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;"
+                                        id='{{s.user.username}}:option4:{{ forloop.counter }}'>
+                                    <label style="padding-left: 10px; padding-right: 10px;"
+                                        id='{{s.user.username}}:labelOption4:{{ forloop.counter }}'>{{question.option4}}</label>
+                                    <hr>
+                                    {% endfor %}
+                                </form>
+                            </fieldset>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="greyBackground">
+        <div class="newAssignmentModal" style="height: 95vh;">
+            <div class='container'>
+                <div class="row modalHead">
+                    <button class="closeModalButton" onclick="newAssignmentModal()">
+                        <img src="{% static 'educationPortal/Icons/x.svg' %}">
+                    </button>
+                </div>
+            </div>
+            {% if user.userType == "Student" %}
+                {% if not submission %}
+                    <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                        <div style="width: 100%; display: flex; justify-content: center;">
+                            <h1 class="QuizTitle">{{quiz.name}}</h1>
+                        </div>
+                        
+                        <form style="width: 80%; overflow: auto; max-height: 70vh;" id="studentQuizForm">
+                            {% for question in quiz.questions.all %}
+                                <h5 id='question:{{ forloop.counter }}'> {{ forloop.counter }}. {{ question.question }}</h5>
+                                <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;" id='option1:{{ forloop.counter }}'>
+                                <label style="padding-left: 10px;">{{question.option1}}</label>
+                                <br>
+                                <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;" id='option2:{{ forloop.counter }}'> 
+                                <label style="padding-left: 10px;">{{question.option2}}</label>
+                                <br>
+                                <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;" id='option3:{{ forloop.counter }}'>
+                                <label style="padding-left: 10px;">{{question.option3}}</label>
+                                <br>
+                                <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;" id='option4:{{ forloop.counter }}'>
+                                <label style="padding-left: 10px;">{{question.option4}}</label>
+                                <hr>
+                            {% endfor %}
+                        </form>
+                        <button onclick="compileResults('{{quiz.questions.count}}', '{{class.code}}', '{{quiz.id}}')" class="submitBtn" hidden>Submit</button>
+                    </div>
+                {% else %}
+                    <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                        <div style="width: 100%; display: flex; justify-content: center;">
+                            <h1 class="QuizTitle">{{quiz.name}}</h1>
+                        </div>
+                        <fieldset disabled="disabled" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                            <form style="width: 80%; overflow: auto; max-height: 70vh;" id="studentQuizForm">
+                                {% for question in quiz.questions.all %}
+                                <h5 id='question:{{ forloop.counter }}'> {{ forloop.counter }}. {{ question.question }}</h5>
+                                <p style="color: rgb(208, 0, 0); font-weight: 600;" id='incorrect:{{forloop.counter}}' hidden>Incorrect</p>
+                                <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;"
+                                    id='option1:{{ forloop.counter }}'>
+                                <label style="padding-left: 10px; padding-right: 10px;" id='labelOption1:{{ forloop.counter }}'>{{question.option1}}</label>
+                                <br>
+                                <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;"
+                                    id='option2:{{ forloop.counter }}'>
+                                <label style="padding-left: 10px; padding-right: 10px;" id='labelOption2:{{ forloop.counter }}'>{{question.option2}}</label>
+                                <br>
+                                <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;"
+                                    id='option3:{{ forloop.counter }}'>
+                                <label style="padding-left: 10px; padding-right: 10px;" id='labelOption3:{{ forloop.counter }}'>{{question.option3}}</label>
+                                <br>
+                                <input type="radio" name='answer:{{ forloop.counter }}' style="margin-left: 20px;"
+                                    id='option4:{{ forloop.counter }}'>
+                                <label style="padding-left: 10px; padding-right: 10px;" id='labelOption4:{{ forloop.counter }}'>{{question.option4}}</label>
+                                <hr>
+                                {% endfor %}
+                            </form>
+                        </fieldset>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </div>
+
+    
+
+
+
+    <script src="{% static 'educationPortal/Classroom.js' %}"></script>
+    <script src="{% static 'educationPortal/index.js' %}"></script>
+    <script src="{% static 'educationPortal/assignments.js' %}"></script>
+
+    <script src="{% static 'educationPortal/quizzes.js' %}"></script>
+
+</body>
+
+</html>
