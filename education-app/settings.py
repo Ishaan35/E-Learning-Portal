@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '6ps8j!crjgrxt34cqbqn7x&b3y%(fny8k8nh21+qa)%ws3fh!q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['e-learning-portal-ishaan.herokuapp.com',
                  '127.0.0.1']
@@ -123,7 +123,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
@@ -131,6 +131,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 # STATICFILES_DIRS = (
 #     os.parth.join(BASE_DIR, 'static'),
 # )
+
+
+
 
 # Email Settings
 EMAIL_HOST = 'smtp.gmail.com'

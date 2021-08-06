@@ -1,4 +1,8 @@
+from os import stat
+from django.conf.urls import url
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
@@ -40,7 +44,7 @@ urlpatterns = [
          views.createQuiz, name="createQuiz"),
     path("ViewClassroom/<str:code>/quizzes/viewQuiz/<int:id>",
          views.viewQuiz, name="viewQuiz"),
-     
+
     path("ViewClassroom/<str:code>/quizzes/viewQuiz/<int:id>/submit",
          views.submitQuiz, name="submitQuiz"),
 ]
