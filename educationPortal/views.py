@@ -254,7 +254,7 @@ def addConversation(request):
             conversation = Conversation()
             conversation.user1 = request.user
             conversation.user2 = to
-            conversation.lastInteracted = time.time()
+            conversation.lastInteracted = int(time.time())
             conversation.save()
 
     if request.method == "DELETE":
@@ -287,7 +287,7 @@ def sendText(request):
 
         newText.save()
         conversation.texts.add(newText)
-        conversation.lastInteracted = time.time()
+        conversation.lastInteracted = int(time.time())
         conversation.save()
 
         if conversation.user1 == request.user:

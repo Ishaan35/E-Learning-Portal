@@ -19,7 +19,6 @@ class User(AbstractUser):
         null=True, blank=True, default="blankUserIcon.svg")
 
 
-
 class Classroom(models.Model):
     name = models.CharField(max_length=100, default="Classroom")
     students = models.ManyToManyField(User, blank=True)
@@ -62,7 +61,7 @@ class Conversation(models.Model):
     user2 = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="user2")
     texts = models.ManyToManyField(Text, blank=True)
-    lastInteracted = models.FloatField()
+    lastInteracted = models.IntegerField()
     readUser1 = models.BooleanField(default=True)
     readUser2 = models.BooleanField(default=True)
 
