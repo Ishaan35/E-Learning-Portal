@@ -24,7 +24,7 @@
             <div id="menuBars">
                 <i class="fas fa-bars menuBars"></i>
             </div>
-            <img src="{% static 'educationPortal/Icons/Logo.svg' %}" style="height: 7vh; margin-right: 20px; color: orange; margin-left: 20px;" class="logo">
+            <img src="{% static 'educationPortal/Icons/Logo.svg' %}" class="logo">
             <h4 class="title">E-Learning Portal</h4>
         </div>
         <div class="headerItems"> 
@@ -38,6 +38,15 @@
                     <i class="fas fa-plus"></i>
                 </button>
             {% endif %}
+
+            {% if newMail %}
+            <a href="{% url 'conversations' %}" class="newMail">
+                <i class="fas fa-envelope"
+                    style=" background-color: rgb(255, 44, 44); color: white; border-radius: 50%; height: 32px; width: 32px; padding: 8px; margin-right: 2px; transform: scale(0.7);"></i>
+                <p style="padding: 0; margin: 0; width: auto; cursor: pointer; text-decoration: none;">New Mail</p>
+                </a>
+            {% endif %}
+
             <button class="profileButton" onclick="profilePopUp()">
                 {% if user.profile_pic %}
                 <img src="{{user.profile_pic.url}}" width="40px" height="40px" style="border-radius: 50%;">

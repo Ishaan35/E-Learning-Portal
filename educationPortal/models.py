@@ -1,17 +1,23 @@
+from io import BytesIO
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.fields import CharField
-from django.db.models.fields.files import FileField, ImageField
+from django.db.models.fields.files import FileField, ImageField, ImageFieldFile
 from django.utils.timezone import localtime, now
 from datetime import datetime
 import time
 import os
+import sys
+from django.core.files.base import File
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from PIL import Image
 
 
 class User(AbstractUser):
     userType = models.CharField(max_length=20, default="student")
     profile_pic = models.ImageField(
         null=True, blank=True, default="blankUserIcon.svg")
+
 
 
 class Classroom(models.Model):
@@ -57,6 +63,8 @@ class Conversation(models.Model):
         User, on_delete=models.CASCADE, related_name="user2")
     texts = models.ManyToManyField(Text, blank=True)
     lastInteracted = models.FloatField()
+    readUser1 = models.BooleanField(default=True)
+    readUser2 = models.BooleanField(default=True)
 
 
 class FileModel(models.Model):

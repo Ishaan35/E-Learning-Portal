@@ -20,18 +20,26 @@ from django.core import serializers
 
 def index(request):
     if request.user.is_authenticated:
+
+        conversations = Conversation.objects.filter(
+            Q(user1=request.user, readUser1=False) | Q(user2=request.user, readUser2=False))
+
+        print(conversations)
+
         if request.user.userType.lower() == "teacher":
             allClasses = Classroom.objects.all().filter(teacher=request.user)
             return render(request, "educationPortal/index.html", {
                 "classes": allClasses,
-                "user": request.user
+                "user": request.user,
+                "newMail": (conversations.count()) > 0
             })
         if request.user.userType.lower() == "student":
             allClasses = Classroom.objects.filter(students=request.user)
             print(allClasses)
             return render(request, "educationPortal/index.html", {
                 "classes": allClasses,
-                "user": request.user
+                "user": request.user,
+                "newMail": (conversations.count()) > 0
             })
 
     else:
@@ -280,6 +288,15 @@ def sendText(request):
         newText.save()
         conversation.texts.add(newText)
         conversation.lastInteracted = time.time()
+        conversation.save()
+
+        if conversation.user1 == request.user:
+            conversation.readUser2 = False
+            conversation.readUser1 = True
+        elif conversation.user2 == request.user:
+            conversation.readUser1 = False
+            conversation.readUser2 = True
+
         conversation.save()
 
     return HttpResponse()

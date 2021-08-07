@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +83,10 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 AUTH_USER_MODEL = 'educationPortal.User'
 
@@ -133,8 +138,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 # )
 
 
-
-
 # Email Settings
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
@@ -142,3 +145,18 @@ EMAIL_HOST_USER = 'e.learningportal.0@gmail.com'
 EMAIL_HOST_PASSWORD = '1!2@3#4$5%6^7&8*9(0)'
 EMAIL_PORT = 587
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# S3 BUCKET CONFIG
+
+AWS_ACCESS_KEY_ID = 'AKIAQ5VJJFTTXJUGTKQR'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'e-learning-portal-files'
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+S3_USE_SIGV4 = True
+AWS_S3_HOST = "s3.us-east-2.amazonaws.com"
+AWS_S3_REGION_NAME = "us-east-2"
+AWS_S3_ADDRESSING_STYLE = "virtual"

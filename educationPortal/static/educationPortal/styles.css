@@ -123,6 +123,7 @@ body {
   width: 45px;
   height: 45px;
   transition: 0.3s;
+  margin-right: 15px;
 }
 .addButton:hover {
   background: rgb(255, 145, 0);
@@ -369,6 +370,38 @@ body {
   background-color: rgb(0, 135, 32);
 }
 
+.logo {
+  height: 7vh;
+  margin-right: 10px;
+  color: orange;
+  margin-left: 20px;
+}
+
+.newMail {
+  background-color: rgb(255, 75, 75);
+  color: white;
+  text-decoration: none;
+  justify-content: center;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  transition: 0.2s;
+  border-radius: 15px;
+  margin-right: 5px;
+}
+.newMail p {
+  text-decoration: none;
+}
+.newMail:hover {
+  text-decoration: none;
+  transition: 0.2s;
+  color: white !important;
+  background-color: rgb(213, 61, 61);
+}
+.newMail p:hover {
+  text-decoration: none;
+}
+
 @media only screen and (max-width: 800px) {
   .mainHeader h2 {
     font-size: 30px;
@@ -413,6 +446,15 @@ body {
   }
 
   .title {
-    width: 150px;
+    width: 100px;
+    font-size: smaller;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .logo {
+    height: 4vh;
+  }
+  .newMail p {
+    font-size: smaller;
   }
 }
