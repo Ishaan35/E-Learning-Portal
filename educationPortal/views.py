@@ -23,9 +23,8 @@ import os
 def index(request):
     if request.user.is_authenticated:
 
-        import os
-        is_prod = os.environ.get('IS_HEROKU', None)
-        print(is_prod)
+        print(os.environ.get('AWS_ACCESS_KEY_ID'))
+        print(os.environ.get('AWS_SECRET_ACCESS_KEY'))
 
         conversations = Conversation.objects.filter(
             Q(user1=request.user, readUser1=False) | Q(user2=request.user, readUser2=False))
