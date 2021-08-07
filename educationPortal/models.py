@@ -61,7 +61,7 @@ class Conversation(models.Model):
     user2 = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="user2")
     texts = models.ManyToManyField(Text, blank=True)
-    lastInteracted = models.IntegerField()
+    lastInteracted = models.IntegerField(default=-1)
     readUser1 = models.BooleanField(default=True)
     readUser2 = models.BooleanField(default=True)
 
