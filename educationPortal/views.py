@@ -16,15 +16,19 @@ from django.db.models import Q
 import time
 from django.core.mail import send_mail
 from django.core import serializers
+import boto3
+import os
 
 
 def index(request):
     if request.user.is_authenticated:
 
+        import os
+        is_prod = os.environ.get('IS_HEROKU', None)
+        print(is_prod)
+
         conversations = Conversation.objects.filter(
             Q(user1=request.user, readUser1=False) | Q(user2=request.user, readUser2=False))
-
-        print(conversations)
 
         if request.user.userType.lower() == "teacher":
             allClasses = Classroom.objects.all().filter(teacher=request.user)

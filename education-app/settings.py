@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+import dj_database_url
 import os
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -84,7 +86,6 @@ DATABASES = {
     }
 }
 
-import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
@@ -148,8 +149,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # S3 BUCKET CONFIG
 
-AWS_ACCESS_KEY_ID = 'AKIAQ5VJJFTTXJUGTKQR'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'e-learning-portal-files'
 
 AWS_S3_FILE_OVERWRITE = False
