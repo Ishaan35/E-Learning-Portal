@@ -86,7 +86,6 @@ DATABASES = {
     }
 }
 
-
 AUTH_USER_MODEL = 'educationPortal.User'
 
 # Password validation
@@ -147,8 +146,12 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # S3 BUCKET CONFIG
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID') if config(
+    'AWS_ACCESS_KEY_ID') else os.environ.get('AWS_ACCESS_KEY_ID')
+
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY') if config(
+    'AWS_SECRET_ACCESS_KEY') else os.environ.get('AWS_SECRET_ACCESS_KEY')
+
 AWS_STORAGE_BUCKET_NAME = 'e-learning-portal-files'
 
 AWS_S3_FILE_OVERWRITE = False
