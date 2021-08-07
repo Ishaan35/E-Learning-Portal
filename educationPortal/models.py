@@ -1,4 +1,3 @@
-from io import BytesIO
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.fields import CharField
@@ -10,7 +9,6 @@ import os
 import sys
 from django.core.files.base import File
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from PIL import Image
 
 
 class User(AbstractUser):
