@@ -123,14 +123,4 @@ in your terminal. This will open a local server in your browser window where you
 
 I believe this project satisfies the distinctiveness and complexity requirements in the guidelines of the project. This is because this app is neither a social media app nor a social media app. This app is meant to make online learning easier and is very distinct from other projects done in the course. It has several features that social media and finance apps do not implement such as assignment creation, file uploads and downloads during runtime, and quiz creation during runtime. This project satisfies the complexity guidelines as it does not re-use code from previous projects, it has 13 models even though the minimum specified 1 model, and there are several pages a user can visit, each with separate functionality. The project utilizes many javascript files for the front end and many view functions for the python back end. The project is also fully mobile responsive.
 
-This app also implements email functionality. Whenever a user receives a grade on an assignment from the teacher, an email is sent to their email address. To do this through Gmail's servers, I had to add the following to the settings.py file:
-
-```python
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ********
-EMAIL_HOST_PASSWORD = ********
-EMAIL_PORT = 587
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-
-```
+This app also implements email functionality. Whenever a user receives a grade on an assignment from the teacher, an email is sent to their email address through Gmail's servers

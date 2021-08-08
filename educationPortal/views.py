@@ -23,8 +23,6 @@ import os
 def index(request):
     if request.user.is_authenticated:
 
-        print(time.time())
-
         conversations = Conversation.objects.filter(
             Q(user1=request.user, readUser1=False) | Q(user2=request.user, readUser2=False))
 
