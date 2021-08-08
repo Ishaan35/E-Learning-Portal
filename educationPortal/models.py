@@ -28,7 +28,7 @@ class Classroom(models.Model):
 
 
 class Comment(models.Model):
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(null=True)
     text = CharField(max_length=5000, default="")
     commenter = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="commenter", null=True)
@@ -40,7 +40,7 @@ class Announcement(models.Model):
     body = CharField(max_length=20000, default="")
     creator = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="creator", null=True)
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(null=True)
     comments = models.ManyToManyField(Comment, blank=True)
 
 
@@ -49,7 +49,7 @@ class Text(models.Model):
         User, on_delete=models.CASCADE, related_name="sender")
     reciever = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="reciever")
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(null=True)
     text = CharField(max_length=1000, default="")
 
 
@@ -78,7 +78,7 @@ class Submission(models.Model):
     description = models.CharField(max_length=1000, default="")
     user = models.ForeignKey(
         User, null=True, related_name="submitter", on_delete=models.CASCADE)
-    date = models.DateField(default=datetime.now())
+    date = models.DateField(null=True)
 
 
 class Assignment(models.Model):
@@ -102,12 +102,12 @@ class MultipleChoiceQuestion(models.Model):
     option3 = models.CharField(max_length=1000)
     option4 = models.CharField(max_length=1000)
     correctOption = models.IntegerField(default=1)
-    selectedOption = models.IntegerField(default=-1)
+    selectedOption = models.IntegerField(default=-10)
 
 
 class QuizSubmission(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    date = models.DateField(default=datetime.now())
+    date = models.DateField(null=True)
     grade = models.IntegerField(default=0)
     answers = models.ManyToManyField(MCanswer, blank=True)
 
