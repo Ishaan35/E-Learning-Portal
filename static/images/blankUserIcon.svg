@@ -1,0 +1,17 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg" fill="white" version="1.1">
+ <title>Abstract user icon</title>
+ <defs>
+  <clipPath id="circular-border">
+   <circle id="svg_1" r="280" cy="300" cx="300"/>
+  </clipPath>
+  <clipPath id="avoid-antialiasing-bugs">
+   <rect id="svg_2" height="498" width="100%"/>
+  </clipPath>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <circle id="svg_3" clip-path="url(#avoid-antialiasing-bugs)" fill="#999999" r="280" cy="300" cx="300"/>
+  <circle id="svg_4" r="115" cy="230" cx="300"/>
+  <circle id="svg_5" clip-path="url(#circular-border)" r="205" cy="550" cx="300"/>
+ </g>
+</svg>
