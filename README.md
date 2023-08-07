@@ -5,7 +5,7 @@
 <div align="left">
   <a href="https://e-learning-portal-ishaan.herokuapp.com/" style="display:flex; align-items:center;">
     <img src="https://raw.githubusercontent.com/Ishaan35/E-Learning-Portal/main/Logo.png" alt="Logo" width="80" height="80" style="margin-right:20px">
-	<h1>BloodSense</h1>
+	<h1>E-Learning Portal</h1>
 	</h1>
   </a>
 
@@ -14,7 +14,7 @@
 ## About The Project
 
 
-E-learning Portal is a web application that is meant for providing easy access between students and teachers during online learning. You can register as a teacher, or as a student. If you register as a teacher, you can create classrooms, and inside those classrooms, you can create quizzes, assignments with files, and announcements. If you register as a student, you can join classes with a unique code generated for that class. Students will be able to submit assignments and quizzes, while the teacher can grade the assignments. Quizzes are marked automatically since they are multiple-choice. Students and teachers are both able to post announcements and class comments in the classroom. Class comments are a good way to communicate with other peers in the class, however, not everyone would like to communicate publicly. For this reason, there is also a feature where users can communicate privately with other students or other teachers. In addition to the base functionality of classrooms, assignments, quizzes, and conversations, users can upload profile pictures to customize their profile.
+[E-learning Portal](https://e-learning-portal-ishaan.herokuapp.com/) is a web application that is meant for providing easy access between students and teachers during online learning. You can register as a teacher, or as a student. If you register as a teacher, you can create classrooms, and inside those classrooms, you can create quizzes, assignments with files, and announcements. If you register as a student, you can join classes with a unique code generated for that class. Students will be able to submit assignments and quizzes, while the teacher can grade the assignments. Quizzes are marked automatically since they are multiple-choice. Students and teachers are both able to post announcements and class comments in the classroom. Class comments are a good way to communicate with other peers in the class, however, not everyone would like to communicate publicly. For this reason, there is also a feature where users can communicate privately with other students or other teachers. In addition to the base functionality of classrooms, assignments, quizzes, and conversations, users can upload profile pictures to customize their profile.
 
 ### Built With
 
@@ -107,7 +107,7 @@ LinkedIn:  https://www.linkedin.com/in/ishaan35/
 
 Personal Website: https://www.ishaanpatel.info/
 
-Project Link: https://app.bloodsense.online
+Project Link: https://e-learning-portal-ishaan.herokuapp.com/
 
 
 
