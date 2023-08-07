@@ -66,9 +66,9 @@ This project is currently production-ready [here](https://e-learning-portal-isha
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Add sub-profiles
-- [ ] Add custom notes feature for every record
-- [ ] Appointment booking reminder
+- [ ] Add a survey/form builder for class opinions
+- [x] Add email notifications for assignment grading
+- [ ] Add google OAuth 2.0 for creating accounts and signing in
 
 ## How to run:
 
