@@ -16,6 +16,8 @@
 
 [E-learning Portal](https://e-learning-portal-ishaan.herokuapp.com/) is a web application that is meant for providing easy access between students and teachers during online learning. You can register as a teacher, or as a student. If you register as a teacher, you can create classrooms, and inside those classrooms, you can create quizzes, assignments with files, and announcements. If you register as a student, you can join classes with a unique code generated for that class. Students will be able to submit assignments and quizzes, while the teacher can grade the assignments. Quizzes are marked automatically since they are multiple-choice. Students and teachers are both able to post announcements and class comments in the classroom. Class comments are a good way to communicate with other peers in the class, however, not everyone would like to communicate publicly. For this reason, there is also a feature where users can communicate privately with other students or other teachers. In addition to the base functionality of classrooms, assignments, quizzes, and conversations, users can upload profile pictures to customize their profile.
 
+(Note this project has been taken offline temporarily as of July 2025)
+
 ### Built With
 
 * [![Django][Django]][Django-url]
